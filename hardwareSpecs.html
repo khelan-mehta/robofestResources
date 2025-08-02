@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autonomous Rover Hardware Requirements</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .summary-card h3 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        
+        .summary-card .value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9em;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+            transition: background-color 0.3s ease;
+        }
+        
+        .category {
+            font-weight: bold;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #74b9ff, #0984e3) !important;
+            color: white !important;
+            text-align: center;
+        }
+        
+        .cost {
+            font-weight: bold;
+            color: #27ae60;
+            font-size: 1.1em;
+        }
+        
+        .total-row {
+            background: linear-gradient(135deg, #00b894, #00a085) !important;
+            color: white !important;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .component-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .specs {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .justification {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .justification h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .justification ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .justification li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .justification li:before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .notes {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .notes h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .notes p {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Autonomous Rover Hardware Requirements</h1>
+            <p>Competition-Ready System with Cost-Optimized Components</p>
+        </div>
+        
+        <div class="content">
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3>Total Components</h3>
+                    <div class="value">17</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Cost</h3>
+                    <div class="value">$847</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Most Expensive</h3>
+                    <div class="value">$180</div>
+                    <small>2D LiDAR</small>
+                </div>
+                <div class="summary-card">
+                    <h3>Development Time</h3>
+                    <div class="value">8-12</div>
+                    <small>weeks</small>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Specific Model/Part</th>
+                            <th>Specifications</th>
+                            <th>Cost (USD)</th>
+                            <th>Justification</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="category">
+                            <td colspan="5">🖥️ COMPUTING PLATFORM</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Main Computer</td>
+                            <td>Raspberry Pi 4B (4GB)</td>
+                            <td class="specs">Quad-core ARM Cortex-A72, 4GB RAM, WiFi, Bluetooth, GPIO</td>
+                            <td class="cost">$75</td>
+                            <td>Sufficient processing power for SLAM and navigation algorithms. Large community support.</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">MicroSD Card</td>
+                            <td>SanDisk Ultra 64GB Class 10</td>
+                            <td class="specs">64GB storage, 120MB/s read speed</td>
+                            <td class="cost">$12</td>
+                            <td>Reliable storage for OS, software, and map data. Fast read/write for real-time operations.</td>
+                        </tr>
+                        
+                        <tr class="category">
+                            <td colspan="5">👁️ SENSOR SUITE</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">2D LiDAR</td>
+                            <td>RPLiDAR A1M8</td>
+                            <td class="specs">360° scan, 12m range, 8000 samples/sec, 5.5Hz rotation</td>
+                            <td class="cost">$180</td>
+                            <td>Most critical sensor for obstacle detection and SLAM. A1M8 offers best price/performance ratio.</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">IMU</td>
+                            <td>MPU-9250 Breakout</td>
+                            <td class="specs">9-DOF (gyro, accel, magnetometer), I2C interface</td>
+                            <td class="cost">$8</td>
+                            <td>Essential for odometry fusion and orientation tracking. Widely supported in ROS.</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Front Camera</td>
+                            <td>Raspberry Pi Camera V2</td>
+                            <td class="specs">8MP, 1080p30 video, CSI interface</td>
+                            <td class="cost">$25</td>
+                            <td>Visual confirmation of obstacles, compact design, direct Pi integration.</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Ultrasonic Sensors (3x)</td>
+                            <td>HC-SR04 (3 units)</td>
+                            <td class="specs">2cm-400cm range, 15° beam angle, 5V operation</td>
+                            <td class="cost">$9</td>
+                            <td>Backup obstacle detection, close-range sensing, extremely reliable and cheap.</td>
+                        </tr>
+                        
+                        <tr class="category">
+                            <td colspan="5">🚗 MOBILITY PLATFORM</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Chassis</td>
+                            <td>4WD Robot Car Kit</td>
+                            <td class="specs">Aluminum frame, 4 motors, wheels, basic structure</td>
+                            <td class="cost">$45</td>
+                            <td>Sturdy platform with differential drive capability. Good weight capacity for sensors.</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Wheel Encoders (2x)</td>
+                            <td>Rotary Encoder 600P/R (2 units)</td>
+                            <td class="specs">600 pulses/revolution, optical, quadrature output</td>
+                            <td class="cost">$16</td>
+                            <td>High resolution for accurate odometry. Essential for precise navigation and SLAM.</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Motor Driver</td>
+                            <td>L298N Dual H-Bridge</td>
+                            <td class="specs">2A per channel, PWM speed control, direction control</td>
+                            <td class="cost">$8</td>
+                            <td>Reliable motor control with speed regulation. Sufficient current for rover motors.</td>
+                        </tr>
+                        
+                        <tr class="category">
+                            <td colspan="5">⚡ POWER SYSTEM</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Main Battery</td>
+                            <td>18650 Li-ion 4S2P Pack (8 cells)</td>
+                            <td class="specs">14.8V, 6000mAh, with BMS protection</td>
+                            <td class="cost">$65</td>
+                            <td>High capacity for extended operation. BMS ensures safety and longevity.</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Voltage Regulator (5V)</td>
+                            <td>Buck Converter 5V/5A</td>
+                            <td class="specs">Input: 7-35V, Output: 5V/5A, 95% efficiency</td>
+                            <td class="cost">$12</td>
+                            <td>Clean 5V power for Pi and sensors. High efficiency reduces heat and extends battery life.</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Power Distribution</td>
+                            <td>Custom PCB/Breadboard</td>
+                            <td class="specs">Power switches, fuses, distribution terminals</td>
+                            <td class="cost">$15</td>
+                            <td>Safe power distribution with emergency cutoff capabilities.</td>
+                        </tr>
+                        
+                        <tr class="category">
+                            <td colspan="5">🔧 CONNECTIVITY & MISC</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Microcontroller</td>
+                            <td>Arduino Nano</td>
+                            <td class="specs">ATmega328P, USB programming, 14 digital I/O</td>
+                            <td class="cost">$15</td>
+                            <td>Real-time sensor reading and motor control. Communicates with Pi via serial.</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">WiFi Module</td>
+                            <td>Built-in Pi WiFi</td>
+                            <td class="specs">802.11ac dual-band, integrated in Pi 4</td>
+                            <td class="cost">$0</td>
+                            <td>Remote monitoring and debugging. No additional cost as it's built into Pi 4.</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Wiring & Connectors</td>
+                            <td>Jumper wires, connectors, etc.</td>
+                            <td class="specs">Various lengths and types</td>
+                            <td class="cost">$25</td>
+                            <td>Reliable connections essential for competition environment.</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Mounting Hardware</td>
+                            <td>Brackets, standoffs, screws</td>
+                            <td class="specs">Aluminum/plastic mounting solutions</td>
+                            <td class="cost">$30</td>
+                            <td>Secure sensor mounting, vibration resistance, easy maintenance access.</td>
+                        </tr>
+                        <tr>
+                            <td class="component-name">Emergency Stop Button</td>
+                            <td>Large Red Mushroom Button</td>
+                            <td class="specs">Normally closed, 22mm, panel mount</td>
+                            <td class="cost">$8</td>
+                            <td>Safety requirement for competitions. Immediate system shutdown capability.</td>
+                        </tr>
+                        
+                        <tr class="total-row">
+                            <td colspan="3"><strong>TOTAL SYSTEM COST</strong></td>
+                            <td class="cost"><strong>$847</strong></td>
+                            <td><strong>Budget-optimized competition-ready rover</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="justification">
+                <h3>💡 Cost Optimization Strategy & Component Justification</h3>
+                <ul>
+                    <li><strong>Raspberry Pi 4B:</strong> Provides sufficient computing power for ROS, SLAM algorithms, and sensor fusion while being cost-effective compared to industrial computers</li>
+                    <li><strong>RPLiDAR A1M8:</strong> Most expensive component but essential. Chosen over A2/A3 for significant cost savings while maintaining adequate performance for competitions</li>
+                    <li><strong>HC-SR04 Ultrasonics:</strong> Extremely reliable and cheap backup sensors. Three units provide 180° coverage for safety</li>
+                    <li><strong>Arduino Nano:</strong> Handles real-time tasks (encoder reading, motor control) that Linux on Pi cannot guarantee timing for</li>
+                    <li><strong>Standard Components:</strong> Using widely available parts ensures easy replacement, extensive documentation, and community support</li>
+                    <li><strong>Modular Design:</strong> Each subsystem can be upgraded independently as budget allows (e.g., upgrading to better LiDAR later)</li>
+                    <li><strong>No Overkill:</strong> Avoided expensive industrial-grade components where competition-grade alternatives suffice</li>
+                </ul>
+            </div>
+            
+            <div class="notes">
+                <h4>🚨 Important Notes & Considerations</h4>
+                <p><strong>Competition Compliance:</strong> Verify that all components meet your specific competition rules regarding size, weight, and sensor restrictions.</p>
+                <p><strong>Assembly Time:</strong> Budget 8-12 weeks for integration, testing, and software development with this hardware configuration.</p>
+                <p><strong>Upgrade Path:</strong> This system can be incrementally improved by upgrading the LiDAR (RPLiDAR A2/A3), adding a second camera, or upgrading to a more powerful compute platform.</p>
+                <p><strong>Software Stack:</strong> Designed for ROS (Robot Operating System) with packages like gmapping, move_base, and navigation stack.</p>
+                <p><strong>Reliability Focus:</strong> Component selection prioritizes proven reliability over cutting-edge features, crucial for competition environments.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

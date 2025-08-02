@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Guide to Build an Autonomous Rover in Onshape</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 3px solid #667eea;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            font-size: 1.3em;
+            color: #666;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+        
+        .table-of-contents {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .table-of-contents h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .table-of-contents ul {
+            list-style: none;
+        }
+        
+        .table-of-contents li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .table-of-contents li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .step {
+            margin: 40px 0;
+            padding: 35px;
+            border-left: 6px solid #667eea;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+        
+        .step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+        }
+        
+        .step h2 {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .step p {
+            font-size: 1.1em;
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+        
+        .step ol {
+            margin: 20px 0 0 30px;
+        }
+        
+        .step li {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 1.05em;
+            line-height: 1.6;
+        }
+        
+        .step ul {
+            margin: 15px 0 0 30px;
+        }
+        
+        .step ul li {
+            list-style-type: disc;
+            margin-bottom: 10px;
+        }
+        
+        .note {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 1em;
+            color: #1565c0;
+            border-left: 4px solid #2196f3;
+            position: relative;
+        }
+        
+        .note::before {
+            content: '💡';
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 1em;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+            position: relative;
+        }
+        
+        .tip::before {
+            content: '🔧';
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 1em;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+            position: relative;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        .sub-step {
+            margin: 25px 0;
+            padding: 25px;
+            background: #ffffff;
+            border-left: 4px solid #74b9ff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sub-step h3 {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .design-rationale {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border-left: 4px solid #9c27b0;
+        }
+        
+        .design-rationale h4 {
+            color: #6a1b9a;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+        }
+        
+        .design-rationale p {
+            color: #4a148c;
+            font-style: italic;
+        }
+        
+        .technical-specs {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .technical-specs h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .technical-specs table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .technical-specs th,
+        .technical-specs td {
+            border: 1px solid #a5d6a7;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .technical-specs th {
+            background: #c8e6c9;
+            font-weight: bold;
+        }
+        
+        .code-snippet {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .measurement-guide {
+            background: #fff9c4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #ffeb3b;
+        }
+        
+        .measurement-guide h4 {
+            color: #f57f17;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .step h2 {
+                font-size: 1.6em;
+            }
+            
+            .step p, .step li {
+                font-size: 1em;
+            }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Comprehensive Guide to Build an Autonomous Rover in Onshape</h1>
+            <p>An extensively detailed, step-by-step guide to design a competition-ready autonomous rover chassis and component mounts using Onshape CAD software. This guide covers everything from initial workspace setup to final assembly and testing.</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div class="table-of-contents">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li>Step 1: Advanced Onshape Workspace Setup and Configuration</li>
+                <li>Step 2: Engineering the Rover Chassis with Structural Analysis</li>
+                <li>Step 3: Precision Wheel and Motor Mount Design</li>
+                <li>Step 4: Advanced Sensor Integration and Mounting Systems</li>
+                <li>Step 5: Power Management and Computer Housing Design</li>
+                <li>Step 6: Complex Assembly Integration and Validation</li>
+                <li>Step 7: Manufacturing Preparation and Quality Control</li>
+                <li>Step 8: Physical Assembly, Testing, and Optimization</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h2>Step 1: Advanced Onshape Workspace Setup and Configuration</h2>
+            <p>Onshape is a professional-grade, cloud-based Computer-Aided Design (CAD) platform that offers parametric modeling capabilities essential for creating precise, manufacturable rover components. Unlike traditional desktop CAD software, Onshape provides real-time collaboration, version control, and cross-platform accessibility, making it ideal for autonomous vehicle development projects.</p>
+            
+            <div class="design-rationale">
+                <h4>Why Choose Onshape for Autonomous Rover Development?</h4>
+                <p>Onshape's cloud-native architecture ensures your designs are always backed up and accessible from any device. The parametric modeling approach allows for rapid design iterations—crucial when optimizing rover performance. The integrated PDM (Product Data Management) system tracks all design changes, enabling you to revert to previous versions if needed during testing phases.</p>
+            </div>
+            
+            <ol>
+                <li><strong>Account Creation and Workspace Initialization:</strong>
+                    <ul>
+                        <li>Navigate to <a href="https://www.onshape.com">www.onshape.com</a> and examine the pricing tiers. The free tier provides full functionality with public document storage—suitable for educational projects.</li>
+                        <li>Click "Sign Up" and choose "Education" if you're a student (provides additional storage and private documents).</li>
+                        <li>During registration, select your primary use case as "Product Design" to optimize the interface layout.</li>
+                        <li>Complete email verification and set up two-factor authentication for account security.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Document Structure and Organization:</strong>
+                    <ul>
+                        <li>Create a new document named "Autonomous_Rover_v1.0" (using version numbers helps track major design iterations).</li>
+                        <li>Set up folder structure: Create tabs for "Chassis_Components," "Sensor_Mounts," "Electronics_Housing," and "Assembly_Main."</li>
+                        <li>Configure document permissions: Add team members if working collaboratively, assign appropriate view/edit rights.</li>
+                        <li>Enable "Follow mode" for real-time collaboration during design reviews.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Workspace Customization and Tool Configuration:</strong>
+                    <ul>
+                        <li>Access User Preferences (gear icon) and set default units to millimeters (standard for precision robotics).</li>
+                        <li>Configure grid settings: Enable 10mm major grid, 1mm minor grid for precise component alignment.</li>
+                        <li>Set up custom keyboard shortcuts for frequently used tools (Sketch: 'S', Extrude: 'E', Fillet: 'F').</li>
+                        <li>Enable "Automatic solving" for sketches to see constraint violations in real-time.</li>
+                        <li>Configure the viewport: Set orthographic projection for technical accuracy, enable dynamic highlighting.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Material Library Setup and Standards Configuration:</strong>
+                    <ul>
+                        <li>Access the Material Library and add relevant materials: Aluminum 6061-T6 (chassis), ABS Plastic (3D printed parts), Steel (fasteners).</li>
+                        <li>Configure default tolerances: Set ±0.1mm for 3D printed parts, ±0.05mm for machined components.</li>
+                        <li>Set up standard hole sizes: M3 (2.5mm pilot), M4 (3.3mm pilot), M5 (4.2mm pilot) for common fasteners.</li>
+                        <li>Create custom properties template for components: Part Number, Material, Weight, Manufacturing Method, Cost Estimate.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Version Control and Backup Strategy:</strong>
+                    <ul>
+                        <li>Enable automatic versioning with descriptive comments for each major design milestone.</li>
+                        <li>Create version tags for: "Initial_Design," "Prototype_Ready," "Testing_Complete," "Production_Ready."</li>
+                        <li>Set up branch structure for parallel development: Main branch for stable design, development branches for experimental features.</li>
+                        <li>Configure notification settings to alert team members of design changes.</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <div class="technical-specs">
+                <h4>Recommended Onshape System Requirements</h4>
+                <table>
+                    <tr><th>Component</th><th>Minimum</th><th>Recommended</th></tr>
+                    <tr><td>Browser</td><td>Chrome 80+, Firefox 75+</td><td>Chrome Latest, Firefox Latest</td></tr>
+                    <tr><td>RAM</td><td>4GB</td><td>8GB+</td></tr>
+                    <tr><td>Graphics</td><td>Integrated GPU</td><td>Dedicated GPU with 2GB+ VRAM</td></tr>
+                    <tr><td>Internet Speed</td><td>5 Mbps</td><td>25 Mbps+</td></tr>
+                </table>
+            </div>
+            
+            <div class="note">
+                <strong>Professional Tip:</strong> Onshape's performance scales with your internet connection speed and browser optimization. Disable unnecessary browser extensions and close unused tabs to maximize performance during complex modeling operations.
+            </div>
+            
+            <div class="tip">
+                <strong>Workflow Optimization:</strong> Create custom feature templates for commonly used rover components (mounting holes, standoffs, cable routes). This reduces design time and ensures consistency across all components.
+            </div>
+            
+            <div class="warning">
+                <strong>Data Security Note:</strong> Free Onshape accounts store documents publicly. If your rover design contains proprietary innovations, consider upgrading to a paid plan for private document storage.
+            </div>
+            
+            <div class="sub-step">
+                <h3>Advanced Interface Mastery and Productivity Enhancement</h3>
+                <p>Understanding Onshape's advanced interface features dramatically improves design efficiency and reduces errors in complex rover assemblies.</p>
+                <ol>
+                    <li><strong>Feature Tree Management:</strong>
+                        <ul>
+                            <li>Organize features logically: Sketch features first, then construction geometry, followed by solid features.</li>
+                            <li>Use descriptive names for all features: "Chassis_Base_Sketch," "Motor_Mount_Extrude," "Cable_Route_Cut."</li>
+                            <li>Create feature folders for related operations: "Mounting_Holes," "Aesthetic_Features," "Manufacturing_Features."</li>
+                            <li>Suppress unused features rather than deleting them to maintain design history.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Sketch Constraint Strategy:</strong>
+                        <ul>
+                            <li>Implement constraint hierarchy: Geometric constraints first (horizontal, vertical, parallel), then dimensional constraints.</li>
+                            <li>Use construction lines to establish design intent before creating actual geometry.</li>
+                            <li>Apply symmetry constraints where applicable to maintain design balance.</li>
+                            <li>Lock critical dimensions and mark them as "driving" parameters for the design.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Parametric Design Philosophy:</strong>
+                        <ul>
+                            <li>Create variable tables for key dimensions: chassis length, width, component spacing, hole diameters.</li>
+                            <li>Link related dimensions using mathematical expressions: wheel_spacing = chassis_width - 40mm.</li>
+                            <li>Use conditional statements for size variations: IF(rover_size="small", 200mm, 300mm).</li>
+                            <li>Document all parameter relationships in comments for future reference.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="measurement-guide">
+                <h4>Precision Measurement Setup</h4>
+                <p>Configure Onshape's measurement tools for maximum accuracy: Enable "Measure" tool shortcuts (M key), set decimal precision to 0.01mm, and use the "Mass Properties" tool to verify component weights against design specifications.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2>Step 2: Engineering the Rover Chassis with Structural Analysis and Load Distribution</h2>
+            <p>The chassis serves as the foundational structure that must withstand dynamic loads, vibrations, and impact forces while maintaining precise sensor alignment and component protection. This step involves advanced structural engineering principles, material selection optimization, and manufacturing constraint integration to create a robust yet lightweight platform.</p>
+            
+            <div class="design-rationale">
+                <h4>Chassis Engineering Principles for Autonomous Vehicles</h4>
+                <p>The chassis design must balance multiple competing requirements: structural rigidity for sensor stability, lightweight construction for energy efficiency, modularity for easy maintenance, and manufacturing feasibility for cost-effective production. The rectangular configuration provides optimal torsional rigidity while maximizing internal volume for component placement.</p>
+            </div>
+            
+            <ol>
+                <li><strong>Structural Design Foundation and Load Analysis:</strong>
+                    <ul>
+                        <li>Create a new Part Studio named "Chassis_Primary" and establish the global coordinate system with origin at the geometric center.</li>
+                        <li>Define load cases: Static load (all components at rest), dynamic load (acceleration/deceleration), impact load (collision scenarios), vibration load (rough terrain operation).</li>
+                        <li>Calculate total system weight: Motors (4x 200g), batteries (800g), electronics (300g), sensors (400g), chassis estimate (500g) = ~2.2kg total.</li>
+                        <li>Apply safety factor of 2.5 for dynamic loading, requiring chassis to support 5.5kg distributed load.</li>
+                        <li>Consider center of gravity placement: Position heavy components (batteries) low and central to minimize tip-over potential.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Advanced Parametric Sketch Development:</strong>
+                    <ul>
+                        <li>Select the Top Plane and create a sketch with construction rectangle representing the maximum envelope constraint (400mm x 300mm based on competition size limits).</li>
+                        <li>Draw the primary chassis rectangle with parametric dimensions: Length = 320mm (L_chassis), Width = 240mm (W_chassis), allowing 10% margin from maximum envelope.</li>
+                        <li>Add corner radius (R_corner = 15mm) using tangent arcs to eliminate stress concentrations and improve crash safety.</li>
+                        <li>Create inner rectangular cutout offset 20mm from outer perimeter to reduce weight while maintaining structural integrity.</li>
+                        <li>Apply symmetric constraints about both centerlines to ensure balanced design.</li>
+                        <li>Add geometric constraints: Equal length sides, perpendicular corners, tangent transitions at radii.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>3D Extrusion with Manufacturing Considerations:</strong>
+                    <ul>
+                        <li>Extrude the chassis profile with variable thickness: 12mm for outer frame (high stress areas), 8mm for inner webs (weight optimization).</li>
+                        <li>Apply draft angles (1-2 degrees) if using injection molding for production, omit for 3D printing or machining.</li>
+                        <li>Create stepped extrusion: Base level at 0mm, raised mounting areas at +5mm for improved component clearance.</li>
+                        <li>Add material removal features: Weight reduction pockets using shell operation (3mm wall thickness minimum).</li>
+                        <li>Implement mounting boss features: Cylindrical protrusions (8mm height, 12mm diameter) at strategic component mounting locations.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Precision Hole Pattern Development for Mounting Systems:</strong>
+                    <ul>
+                        <li>Create hole pattern sketch on the top face using dimensional constraints from component datasheets.</li>
+                        <li>Motor mounting holes: 4x sets of 2x M4 holes, 30mm spacing (verify with motor manufacturer specifications).</li>
+                        <li>Position motor holes at coordinates: (±135, ±95), (±135, ±95) + (30,0) for dual-hole patterns.</li>
+                        <li>Add countersink features (6mm diameter, 2mm depth) for flush screw head mounting.</li>
+                        <li>Electronics mounting grid: 10x10mm pattern across central area for flexible component placement.</li>
+                        <li>Cable management holes: 8mm diameter at strategic locations with chamfered edges (1mm x 45°) to prevent wire damage.</li>
+                        <li>Apply geometric tolerancing: Position tolerance ±0.1mm for critical mounting features, ±0.2mm for general features.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Structural Reinforcement and Stress Distribution:</strong>
+                    <ul>
+                        <li>Add internal ribs using swept features: 3mm thick, 10mm tall ribs following high-stress load paths.</li>
+                        <li>Create triangulated bracing between corner mounting points to distribute impact loads.</li>
+                        <li>Implement mounting pad reinforcement: Thicken areas around large component mounts to 15mm for improved load distribution.</li>
+                        <li>Add vibration dampening features: Integrate rubber insert pockets (Shore A 40-60 durometer) at sensor mounting locations.</li>
+                        <li>Design expansion joints: 1mm gaps at non-critical locations to accommodate thermal expansion (important for outdoor operation).</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Manufacturing Feature Integration:</strong>
+                    <ul>
+                        <li>Add manufacturing identification features: Raised text (1mm height) with part number, revision, and manufacturing date fields.</li>
+                        <li>Create reference datum features: 3-2-1 datum scheme with machined surfaces for assembly fixture alignment.</li>
+                        <li>Implement quality control features: Inspection holes for dimensional verification, witness marks for assembly verification.</li>
+                        <li>Add handling features: Finger grips or lifting points for safe handling during assembly.</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <div class="technical-specs">
+                <h4>Chassis Material Properties and Specifications</h4>
+                <table>
+                    <tr><th>Material</th><th>Density (g/cm³)</th><th>Tensile Strength (MPa)</th><th>Young's Modulus (GPa)</th><th>Cost ($/kg)</th></tr>
+                    <tr><td>Aluminum 6061-T6</td><td>2.70</td><td>310</td><td>69</td><td>$4-6</td></tr>
+                    <tr><td>ABS Plastic</td><td>1.05</td><td>40</td><td>2.3</td><td>$2-3</td></tr>
+                    <tr><td>PETG Plastic</td><td>1.27</td><td>50</td><td>2.1</td><td>$3-4</td></tr>
+                    <tr><td>Carbon Fiber</td><td>1.60</td><td>600</td><td>150</td><td>$15-25</td></tr>
+                </table>
+            </div>
+            
+            <div class="sub-step">
+                <h3>Advanced Structural Analysis and Optimization</h3>
+                <p>Implementing finite element analysis principles within Onshape's simulation capabilities to validate chassis performance under operational loads.</p>
+                <ol>
+                    <li><strong>Load Case Definition and Boundary Conditions:</strong>
+                        <ul>
+                            <li>Define primary load case: 4x wheel reaction forces (vertical: 5.5N each, lateral: 2N each during turning).</li>
+                            <li>Secondary load case: Emergency stop deceleration (0.8g) creating 1.76N forward inertial load on each component.</li>
+                            <li>Impact load case: Collision scenario with 100N point load applied at chassis front edge.</li>
+                            <li>Thermal load case: 20°C temperature differential between electronics and ambient for thermal stress analysis.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Stress Analysis and Safety Factor Validation:</strong>
+                        <ul>
+                            <li>Apply material properties from technical database: Yield strength, ultimate strength, fatigue limits.</li>
+                            <li>Run static analysis for all load cases with mesh refinement at stress concentrations.</li>
+                            <li>Verify safety factors: 2.5 minimum for static loads, 4.0 minimum for dynamic loads, 6.0 for impact loads.</li>
+                            <li>Identify high-stress areas (typically around mounting holes and corners) and implement localized reinforcement.</li>
+                            <li>Check deformation limits: Maximum deflection <0.5mm at sensor mounting points to maintain calibration accuracy.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Optimization Strategies and Weight Reduction:</strong>
+                        <ul>
+                            <li>Implement topology optimization: Remove material from low-stress areas while maintaining structural integrity.</li>
+                            <li>Create lattice structures in non-critical areas: 3D periodic cellular structures for weight reduction (20-30% weight savings possible).</li>
+                            <li>Optimize wall thickness: Use variable thickness design with minimum 2mm for 3D printing, 1.5mm for machining.</li>
+                            <li>Integrate component functions: Combine chassis structure with cable management, heat dissipation, and mounting functions.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="note">
+                <strong>Structural Engineering Insight:</strong> The chassis experiences both static and dynamic loads. Static loads from component weight are predictable, but dynamic loads from acceleration, turning, and impact are highly variable. Design for the worst-case scenario with appropriate safety margins.
+            </div>
+            
+            <div class="tip">
+                <strong>Manufacturing Optimization:</strong> Design the chassis for your available manufacturing method. 3D printing allows complex internal structures but has surface finish limitations. CNC machining provides superior finish and accuracy but limits geometric complexity.
+            </div>
+            
+            <div class="warning">
+                <strong>Critical Design Warning:</strong> Never compromise on structural integrity to save weight or cost. A chassis failure can damage expensive electronics and potentially cause injury. Always validate your design through analysis or physical testing.
+            </div>
+            
+            <div class="measurement-guide">
+                <h4>Precision Dimensioning Strategy</h4>
+                <p>Use GD&T (Geometric Dimensioning and Tolerancing) principles: Position tolerance ±0.1mm for sensor mounts, perpendicularity 0.05mm for mounting surfaces, flatness 0.1mm for critical interfaces. Document all critical dimensions with inspection requirements.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2>Step 3: Precision Wheel and Motor Mount Design with Dynamic Analysis</h2>
+            <p>The drivetrain mounting system is critical for autonomous rover performance, requiring precise alignment, robust attachment, and vibration isolation. This step covers advanced mounting bracket design, bearing integration, alignment optimization, and power transmission considerations for a 4WD system with individual motor control.</p>
+            
+            <div class="design-rationale">
+                <h4>Advanced Drivetrain Engineering for Autonomous Systems</h4>
+                <p>Autonomous rovers require precise wheel positioning and motor mounting to ensure accurate odometry calculations, smooth operation, and reliable navigation. The mounting system must accommodate manufacturing tolerances, thermal expansion, and operational wear while maintaining alignment accuracy within ±0.5mm for proper sensor fusion and localization algorithms.</p>
+            </div>
+            
+            <ol>
+                <li><strong>Motor Specification Analysis and Mounting Requirements:</strong>
+                    <ul>
+                        <li>Analyze 4WD Robot Car Kit motor specifications: Typically 6V DC geared motors with 1:48 reduction ratio, 200 RPM no-load speed, 2.5kg·cm stall torque.</li>
+                        <li>Motor dimensions: 70mm length × 22mm diameter body, M3 mounting holes spaced 48mm apart, 6mm diameter output shaft with 23mm extension.</li>
+                        <li>Calculate operational loads: Maximum torque load = 2.5kg·cm × 4 motors = 10kg·cm total driving force.</li>
+                        <li>Determine mounting force requirements: Radial load = 15N per motor (from gear backlash and misalignment), axial load = 5N per motor (from wheel thrust).</li>
+                        <li>Account for shock loads: 3x normal operating loads during emergency stops or collision scenarios.</li>
+                        <li>Consider thermal expansion: Aluminum motor housing expands ~0.02mm per 10°C temperature rise.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Advanced Bracket Design with Integrated Features:</strong>
+                    <ul>
+                        <li>Create new Part Studio "Motor_Mount_Assembly" with parametric design variables for motor spacing and alignment.</li>
+                        <li>Design L-shaped mounting bracket: Vertical face (60mm × 40mm × 5mm) for motor attachment, horizontal face (50mm × 40mm × 5mm) for chassis connection.</li>
+                        <li>Add reinforcement ribs: 3mm thick triangular gussets connecting vertical and horizontal faces at 45° angle for improved stiffness.</li>
+                        <li>Integrate cable management: Create semicircular channel (6mm radius) along bracket edge for motor power cables with strain relief features.</li>
+                        <li>Design adjustable alignment system: Slotted holes (4mm × 8mm) in chassis mounting face allow ±2mm adjustment for wheel alignment.</li>
+                        <li>Add vibration dampening: Create pockets for rubber bushings (10mm diameter × 3mm thick) between motor and bracket interface.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Precision Hole Pattern and Fastener Selection:</strong>
+                    <ul>
+                        <li>Motor mounting holes: 2x M3 tapped holes with 48mm spacing (verify with calipers), positioned 15mm from bracket bottom edge.</li>
+                        <li>Add clearance holes: 3.2mm diameter for M3 screws with ±0.1mm tolerance for thermal expansion accommodation.</li>
+                        <li>Chassis mounting pattern: 4x M4 holes in rectangular pattern (30mm × 25mm) with countersinks for flush mounting.</li>
+                        <li>Create pilot holes: 2.5mm diameter for M3 tapping, 3.3mm diameter for M4 through holes.</li>
+                        <li>Implement fastener standardization: Use only M3 and M4 screws throughout design to minimize inventory requirements.</li>
+                        <li>Add thread engagement calculations: Minimum 1.5x screw diameter thread engagement (4.5mm for M3, 6mm for M4) for aluminum materials.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Wheel Alignment and Geometric Constraints:</strong>
+                    <ul>
+                        <li>Establish global coordinate system: Front axis (Y-direction), left-right axis (X-direction), vertical axis (Z-direction).</li>
+                        <li>Calculate wheelbase: 240mm (distance between front and rear axles) for optimal stability and turning radius.</li>
+                        <li>Set track width: 200mm (distance between left and right wheels) balancing stability with maneuverability.</li>
+                        <li>Implement toe-in alignment: 0.5° inward angle for front wheels to compensate for mechanical play and improve straight-line tracking.</li>
+                        <li>Add camber considerations: Vertical wheel alignment (0° camber) for maximum ground contact and even tire wear.</li>
+                        <li>Create alignment verification features: Reference pins and measurement points for assembly quality control.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Advanced Mounting Bracket Variations and Modular Design:</strong>
+                    <ul>
+                        <li>Design front motor brackets: Include integrated bumper mounting points and sensor cable routing channels.</li>
+                        <li>Create rear motor brackets: Add emergency stop mechanism mounting and battery cable access slots.</li>
+                        <li>Develop side motor brackets: Incorporate ultrasonic sensor mounting bosses and side impact protection features.</li>
+                        <li>Implement modular connection system: Standardized interface allows bracket interchange for different configurations.</li>
+                        <li>Add service access features: Quick-release mechanisms for motor replacement without chassis disassembly.</li>
+                        <li>Create mounting height variations: 10mm, 15mm, and 20mm height options for different wheel diameters and ground clearance requirements.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Bearing Integration and Shaft Support Systems:</strong>
+                    <ul>
+                        <li>Design auxiliary bearing support: Add 6mm ID ball bearings to support motor shaft near wheel attachment point.</li>
+                        <li>Create bearing housing: Press-fit design (22mm OD bearing housing) with retention shoulder and lubrication provisions.</li>
+                        <li>Implement shaft alignment guides: Bushings or guides to prevent shaft deflection under load.</li>
+                        <li>Add seal integration: Design grooves for O-ring seals (6mm × 1mm) to protect bearings from dirt and moisture.</li>
+                        <li>Calculate bearing life: Minimum 1000 hours operation at rated load with proper lubrication.</li>
+                        <li>Design maintenance access: Removable bearing caps for inspection and replacement without major disassembly.</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <div class="technical-specs">
+                <h4>Motor Mount Load Analysis and Material Selection</h4>
+                <table>
+                    <tr><th>Load Type</th><th>Magnitude</th><th>Direction</th><th>Safety Factor</th><th>Design Load</th></tr>
+                    <tr><td>Static Weight</td><td>5.5N</td><td>Vertical</td><td>2.5</td><td>13.8N</td></tr>
+                    <tr><td>Driving Torque</td><td>2.5kg·cm</td><td>Rotational</td><td>3.0</td><td>7.5kg·cm</td></tr>
+                    <tr><td>Shock Load</td><td>50N</td><td>Any Direction</td><td>2.0</td><td>100N</td></tr>
+                    <tr><td>Vibration</td><td>±2N</td><td>Multi-axis</td><td>4.0</td><td>±8N</td></tr>
+                </table>
+            </div>
+            
+            <div class="sub-step">
+                <h3>Advanced Manufacturing and Assembly Considerations</h3>
+                <p>Optimizing motor mount design for various manufacturing processes while ensuring assembly efficiency and maintenance accessibility.</p>
+                <ol>
+                    <li><strong>Manufacturing Process Optimization:</strong>
+                        <ul>
+                            <li>3D Printing Considerations: Design 45° support angles to minimize support material, add 0.3mm clearance for moving parts.</li>
+                            <li>CNC Machining Setup: Design for 3-axis machining with minimal tool changes, avoid deep pockets requiring long end mills.</li>
+                            <li>Injection Molding Adaptation: Add 1-2° draft angles, design uniform wall thickness (3-5mm), eliminate undercuts.</li>
+                            <li>Sheet Metal Fabrication: Design bend radii ≥1.5x material thickness, maintain minimum bend relief dimensions.</li>
+                            <li>Post-processing Requirements: Plan for deburring, surface finishing, and heat treatment if required.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Assembly Sequence Optimization:</strong>
+                        <ul>
+                            <li>Design assembly jigs: Create temporary fixtures to ensure accurate bracket positioning during initial assembly.</li>
+                            <li>Implement assembly verification: Add witness marks and measurement points for quality control.</li>
+                            <li>Optimize fastener accessibility: Ensure all mounting screws are accessible with standard tools (Phillips #2, Allen 3mm).</li>
+                            <li>Create assembly documentation: Generate exploded views and torque specifications for each fastener.</li>
+                            <li>Plan for field maintenance: Design quick-disconnect features for motor replacement in competition environments.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Quality Control and Testing Procedures:</strong>
+                        <ul>
+                            <li>Dimensional verification: Establish go/no-go gauges for critical dimensions and hole patterns.</li>
+                            <li>Load testing protocol: Apply 150% design loads for 10 minutes to verify structural integrity.</li>
+                            <li>Vibration testing: Subject assemblies to 50Hz vibration for 30 minutes to verify fastener retention.</li>
+                            <li>Wear testing: Operate motors for 100 hours under normal loads to verify bearing and mounting durability.</li>
+                            <li>Environmental testing: Verify performance under temperature extremes (-10°C to +50°C) and humidity variations.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="note">
+                <strong>Precision Engineering Note:</strong> Motor alignment directly affects rover navigation accuracy. A 1° wheel misalignment can cause 17mm lateral drift per meter of travel, significantly impacting autonomous navigation performance. Use precision alignment tools during assembly.
+            </div>
+            
+            <div class="tip">
+                <strong>Maintenance Optimization:</strong> Design motor mounts with captive fasteners or quick-release mechanisms. Competition environments require rapid repairs and component swaps. Consider using quarter-turn fasteners for non-structural connections.
+            </div>
+            
+            <div class="warning">
+                <strong>Critical Safety Warning:</strong> Motor mount failure can cause loss of vehicle control. Always verify fastener torque specifications and use thread-locking compound on critical fasteners. Implement redundant mounting where possible.
+            </div>
+            
+            <div class="measurement-guide">
+                <h4>Motor Mount Precision Requirements</h4>
+                <p>Wheelbase accuracy: ±1mm, Track width accuracy: ±0.5mm, Wheel alignment: ±0.25°, Motor shaft concentricity: ±0.1mm TIR. Use coordinate measuring machine (CMM) or precision measuring tools for verification.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2>Step 4: Advanced Sensor Integration and Mounting Systems with Environmental Protection</h2>
+            <p>Sensor mounting design is crucial for autonomous rover functionality, requiring precise positioning, vibration isolation, environmental protection, and electromagnetic interference (EMI) shielding. Each sensor type has unique mounting requirements based on operational principles, field of view, and accuracy specifications.</p>
+            
+            <div class="design-rationale">
+                <h4>Multi-Sensor Fusion Architecture and Mounting Strategy</h4>
+                <p>Modern autonomous rovers utilize sensor fusion algorithms that combine data from multiple sensor types to create robust perception systems. The mounting design must ensure optimal sensor placement for maximum coverage while minimizing interference between sensors. Precise positioning enables accurate coordinate transformations essential for sensor fusion algorithms.</p>
+            </div>
+            
+            <ol>
+                <li><strong>LiDAR Mounting System Engineering (RPLiDAR A1M8):</strong>
+                    <ul>
+                        <li>Analyze LiDAR specifications: 360° scanning range, 8-12m detection distance, 8000 samples/second, 5-10Hz rotation speed.</li>
+                        <li>Design elevated mounting platform: 120mm diameter circular base with 25mm height to clear all rover components within 6m radius.</li>
+                        <li>Create precision mounting pattern: 4x M3 holes on 70mm bolt circle diameter (verify with RPLiDAR A1M8 technical drawing).</li>
+                        <li>Implement vibration isolation: Design rubber dampening pads (Shore A 50 durometer) between LiDAR and mount to reduce noise from motor vibrations.</li>
+                        <li>Add cable management system: Create spiral cable guide allowing 360° rotation without cable binding, include strain relief for power and data cables.</li>
+                        <li>Design environmental protection: Add transparent protective dome (polycarbonate, 2mm thick) with AR coating to protect from debris while maintaining optical clarity.</li>
+                        <li>Include cooling considerations: Design ventilation slots around base perimeter for heat dissipation, LiDAR generates ~8W thermal load.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Camera Mounting System with Optical Optimization:</strong>
+                    <ul>
+                        <li>Analyze Raspberry Pi Camera V2 specifications: 8MP resolution, 62.2° × 48.8° field of view, 25mm × 24mm sensor size.</li>
+                        <li>Design articulated mounting system: Two-axis gimbal allowing ±30° pan and ±15° tilt adjustment for optimal viewing angle.</li>
+                        <li>Create precision camera housing: Exact fit for camera module (25mm × 24mm × 9mm) with 0.2mm clearance for thermal expansion.</li>
+                        <li>Implement lens protection: Design retractable lens cover with servo motor control for protection during non-operational periods.</li>
+                        <li>Add optical isolation: Black anodized internal surfaces and light baffles to prevent stray light and improve image quality.</li>
+                        <li>Design cable management: Flexible ribbon cable routing with minimum 10mm bend radius to prevent damage.</li>
+                        <li>Include focus adjustment mechanism: Threaded barrel allowing ±2mm focus range adjustment for different operational distances.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Ultrasonic Sensor Array Design and Positioning:</strong>
+                    <ul>
+                        <li>Analyze HC-SR04 specifications: 2-400cm range, 15° beam angle, 40kHz operating frequency, 45mm × 20mm × 15mm dimensions.</li>
+                        <li>Design strategic placement pattern: Front sensor (0° heading), side sensors (±90° heading) for 270° coverage with overlap zones.</li>
+                        <li>Create adjustable mounting brackets: Allow ±10° vertical and ±5° horizontal adjustment for optimization of coverage zones.</li>
+                        <li>Implement acoustic isolation: Design sound dampening barriers between sensors to prevent cross-talk interference.</li>
+                        <li>Add environmental sealing: IP65-rated enclosures with membrane vents for pressure equalization while excluding moisture.</li>
+                        <li>Design beam pattern verification: Include test fixtures for measuring actual beam patterns and validating coverage zones.</li>
+                        <li>Create cable standardization: Common 4-wire interface (VCC, GND, Trigger, Echo) with standardized connector types.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>IMU and GPS Integration with Precision Positioning:</strong>
+                    <ul>
+                        <li>Design IMU mounting location: Position at rover's center of rotation to minimize acceleration measurement errors during turning.</li>
+                        <li>Create vibration-isolated platform: Multi-layer dampening system using silicone gel pads and foam isolation.</li>
+                        <li>Implement thermal stability: Design thermal mass buffer to minimize temperature fluctuations affecting sensor accuracy.</li>
+                        <li>Add magnetic field isolation: Create non-ferrous mounting zone (aluminum/plastic only) within 50mm radius of magnetometer.</li>
+                        <li>Design GPS antenna mounting: Elevated position with clear sky view, minimum 100mm separation from other electronics.</li>
+                        <li>Include ground plane design: 100mm × 100mm ground plane for improved GPS signal reception and multipath reduction.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Advanced Sensor Calibration and Reference Systems:</strong>
+                    <ul>
+                        <li>Create calibration fixture mounting: Standardized reference points for sensor alignment and calibration procedures.</li>
+                        <li>Design coordinate system markers: Physical reference features for establishing sensor coordinate transformations.</li>
+                        <li>Implement sensor fusion geometry: Precise measurement and documentation of sensor positions relative to rover center for algorithm implementation.</li>
+                        <li>Add field calibration features: Quick-release mounts allowing sensor removal for laboratory calibration without losing position reference.</li>
+                        <li>Create alignment verification system: Laser alignment tools and measurement fixtures for field verification of sensor positioning.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Environmental Protection and EMI Shielding:</strong>
+                    <ul>
+                        <li>Design IP rating compliance: Achieve IP54 rating (dust protection, splash water protection) for all sensor enclosures.</li>
+                        <li>Implement EMI shielding: Conductive gaskets and metal housing for sensitive electronics, grounding straps for shield continuity.</li>
+                        <li>Add thermal management: Heat sinks, thermal interface materials, and ventilation design for sensors generating significant heat.</li>
+                        <li>Create UV protection: UV-resistant materials and coatings for outdoor operation, preventing plastic degradation and optical component damage.</li>
+                        <li>Design shock protection: Impact-resistant housings and energy-absorbing features to protect sensors during collisions.</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <div class="technical-specs">
+                <h4>Sensor Mounting Specifications and Requirements</h4>
+                <table>
+                    <tr><th>Sensor Type</th><th>Position Accuracy</th><th>Vibration Isolation</th><th>Environmental Rating</th><th>Power Requirements</th></tr>
+                    <tr><td>LiDAR (RPLiDAR A1M8)</td><td>±1mm</td><td>-20dB @ 20-200Hz</td><td>IP54</td><td>5V, 1.5A</td></tr>
+                    <tr><td>Camera (Pi Camera V2)</td><td>±0.5mm</td><td>-15dB @ 5-50Hz</td><td>IP42</td><td>3.3V, 0.25A</td></tr>
+                    <tr><td>Ultrasonic (HC-SR04)</td><td>±2mm</td><td>-10dB @ 40kHz isolation</td><td>IP65</td><td>5V, 0.015A</td></tr>
+                    <tr><td>IMU (MPU-9250)</td><td>±0.1mm</td><td>-25dB @ 1-1000Hz</td><td>IP67</td><td>3.3V, 0.004A</td></tr>
+                </table>
+            </div>
+            
+            <div class="sub-step">
+                <h3>Advanced Sensor Fusion Geometry and Coordinate Systems</h3>
+                <p>Establishing precise spatial relationships between sensors for optimal autonomous navigation performance.</p>
+                <ol>
+                    <li><strong>Coordinate System Establishment:</strong>
+                        <ul>
+                            <li>Define rover coordinate system: Origin at geometric center, X-axis forward, Y-axis left, Z-axis up (ROS standard).</li>
+                            <li>Document sensor positions: LiDAR at (0, 0, +85mm), Front camera at (+120mm, 0, +60mm), IMU at (0, 0, +30mm).</li>
+                            <li>Measure sensor orientations: LiDAR 0° rotation, Camera 0° pan/0° tilt, Ultrasonics at 0°, ±90°, 180° headings.</li>
+                            <li>Create transformation matrices: 4x4 homogeneous transformation matrices for converting between sensor coordinate frames.</li>
+                            <li>Validate geometric accuracy: Use coordinate measuring machine (CMM) or laser tracker for sub-millimeter position verification.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Sensor Field of View Optimization:</strong>
+                        <ul>
+                            <li>Analyze coverage overlap: Ensure 10-15° overlap between adjacent sensors for robust detection in boundary regions.</li>
+                            <li>Optimize vertical positioning: Position sensors to detect ground-level obstacles while avoiding ground clutter in sensor data.</li>
+                            <li>Design blind spot minimization: Use multiple sensor types to provide redundant coverage in critical navigation zones.</li>
+                            <li>Create detection zone mapping: Document expected detection ranges and accuracy for different obstacle types and environmental conditions.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Calibration Procedures and Quality Assurance:</strong>
+                        <ul>
+                            <li>Develop factory calibration: Standard calibration fixtures and procedures for consistent sensor alignment during manufacturing.</li>
+                            <li>Create field calibration protocols: Simplified alignment procedures using portable reference targets and measurement tools.</li>
+                            <li>Implement calibration verification: Automated software routines to detect sensor misalignment and prompt recalibration.</li>
+                            <li>Design maintenance intervals: Schedule periodic recalibration based on operational hours and environmental exposure.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="note">
+                <strong>Sensor Fusion Engineering:</strong> Accurate sensor positioning is critical for fusion algorithms. A 1mm position error can cause 0.1° angular error at 1m distance, significantly affecting navigation accuracy. Use precision measurement tools and maintain detailed documentation.
+            </div>
+            
+            <div class="tip">
+                <strong>Maintenance Strategy:</strong> Design sensor mounts with quick-disconnect features and standardized interfaces. Competition environments require rapid sensor replacement. Include spare sensor mounting provisions for backup systems.
+            </div>
+            
+            <div class="warning">
+                <strong>EMI Compatibility Warning:</strong> Multiple sensors operating simultaneously can cause electromagnetic interference. Maintain minimum 50mm separation between high-frequency sensors and sensitive electronics. Use proper grounding and shielding techniques.
+            </div>
+            
+            <div class="measurement-guide">
+                <h4>Sensor Positioning Precision Standards</h4>
+                <p>Position tolerance: ±0.5mm for critical sensors, ±1mm for secondary sensors. Angular tolerance: ±0.1° for LiDAR and cameras, ±0.5° for ultrasonic sensors. Use optical measurement systems for verification and maintain calibration certificates.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2>Step 5: Power Management and Computer Housing Design with Thermal Analysis</h2>
+            <p>The power and computing subsystem requires sophisticated mechanical design to ensure reliable operation, proper cooling, electromagnetic compatibility, and safety compliance. This includes battery management, power distribution, computing platform protection, and thermal management for optimal performance under varying operational conditions.</p>
+            
+            <div class="design-rationale">
+                <h4>Integrated Power and Computing Architecture Philosophy</h4>
+                <p>Modern autonomous rovers require sophisticated power management systems that balance energy efficiency, computational performance, and safety requirements. The mechanical design must accommodate various power sources, provide clean power distribution, ensure proper grounding, and maintain optimal operating temperatures for all electronic components while meeting safety standards for lithium battery systems.</p>
+            </div>
+            
+            <ol>
+                <li><strong>Advanced Battery Management System Design:</strong>
+                    <ul>
+                        <li>Analyze 18650 4S2P battery pack specifications: 14.8V nominal, 5000mAh capacity, 150mm × 75mm × 20mm dimensions, 400g weight.</li>
+                        <li>Design modular battery housing: Removable battery tray with integrated BMS (Battery Management System) mounting and thermal management.</li>
+                        <li>Implement safety features: Overcurrent protection, thermal runaway containment, emergency disconnection, and fire-resistant materials (UL94 V-0 rated).</li>
+                        <li>Create ventilation system: Controlled airflow for gas venting during abnormal conditions, filtered intake to prevent debris contamination.</li>
+                        <li>Add thermal monitoring: Thermistor mounting points for battery temperature monitoring, integration with thermal management system.</li>
+                        <li>Design charging infrastructure: External charging port with disconnect switches, charge indication LEDs, and charging safety interlocks.</li>
+                        <li>Implement vibration protection: Shock-absorbing mounting system to prevent battery damage from rover movement and impacts.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Raspberry Pi 4B Housing with Advanced Thermal Management:</strong>
+                    <ul>
+                        <li>Analyze Pi 4B thermal requirements: 15W maximum power consumption, 85°C maximum operating temperature, 85mm × 56mm × 17mm dimensions.</li>
+                        <li>Design precision-fit enclosure: Exact dimensional fit with 0.3mm clearance, access ports for all connectors (USB, HDMI, GPIO, Ethernet).</li>
+                        <li>Implement active cooling system: 40mm × 40mm × 10mm fan with PWM speed control, intake/exhaust airflow design.</li>
+                        <li>Create heat sink integration: Custom aluminum heat sink design with thermal interface material (TIM) for CPU and RAM chips.</li>
+                        <li>Add EMI shielding: Conductive enclosure with proper grounding to minimize electromagnetic interference with sensors.</li>
+                        <li>Design cable management: Strain relief for all cables, standardized connector types, and cable routing channels.</li>
+                        <li>Implement environmental protection: IP54 rating with filtered ventilation, conformal coating access for PCB protection.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Arduino Nano Integration and I/O Management:</strong>
+                    <ul>
+                        <li>Design compact mounting solution: Custom PCB carrier board with integrated power regulation and signal conditioning.</li>
+                        <li>Create standardized I/O interface: Screw terminal blocks for sensor connections, LED status indicators, and test points.</li>
+                        <li>Implement electrical isolation: Optocouplers for motor control signals, separate analog and digital grounds for noise reduction.</li>
+                        <li>Add programming interface: Accessible USB connector for firmware updates, ICSP header for advanced programming.</li>
+                        <li>Design expandability: Extra GPIO breakout points, I2C/SPI expansion connectors, and prototype area for custom circuits.</li>
+                        <li>Include diagnostics: Built-in LED indicators for power, communication status, and error conditions.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Power Distribution and Electrical Safety Systems:</strong>
+                    <ul>
+                        <li>Design multi-rail power distribution: +12V for motors, +5V for sensors, +3.3V for microcontrollers, with individual overcurrent protection.</li>
+                        <li>Create centralized power management: Main power distribution board with fuses, switches, and monitoring capabilities.</li>
+                        <li>Implement emergency shutdown: Hardware-based emergency stop system independent of software control, latching relay design.</li>
+                        <li>Add power monitoring: Current and voltage sensing for each power rail, integration with battery management for power budgeting.</li>
+                        <li>Design grounding system: Single-point grounding strategy to minimize ground loops and EMI, separate digital and analog grounds.</li>
+                        <li>Include reverse polarity protection: Diode/MOSFET protection circuits to prevent damage from incorrect wiring.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Thermal Analysis and Management System:</strong>
+                    <ul>
+                        <li>Perform thermal load calculation: Pi 4B (15W), Arduino (2W), Motor drivers (20W), Sensors (5W) = 42W total heat generation.</li>
+                        <li>Design cooling airflow: Forced convection system with intake/exhaust fans, calculated airflow requirement of 15 CFM for 20°C temperature rise.</li>
+                        <li>Create thermal zones: Separate cooling for high-power components (Pi, motor drivers) and sensitive components (sensors, IMU).</li>
+                        <li>Implement thermal interfaces: Thermal pads, heat sinks, and heat pipes for efficient heat transfer from components to airflow.</li>
+                        <li>Add temperature monitoring: Multiple temperature sensors with automated fan control and thermal throttling protection.</li>
+                        <li>Design heat dissipation surfaces: Extended surface area fins and heat spreading plates for improved convective cooling.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Mechanical Integration and Serviceability:</strong>
+                    <ul>
+                        <li>Create modular design: Individual component housings with standardized mounting interfaces for easy replacement.</li>
+                        <li>Design access panels: Tool-free access to frequently serviced components (SD card, USB ports, diagnostic connectors).</li>
+                        <li>Implement cable management: Organized cable routing with strain relief, color coding, and labeling for maintenance.</li>
+                        <li>Add structural integration: Computing enclosures integrated into chassis structure for weight and space optimization.</li>
+                        <li>Design shock protection: Vibration isolation mounts for sensitive electronic components, impact protection for battery systems.</li>
+                        <li>Create assembly fixtures: Jigs and guides for accurate component positioning during assembly and maintenance.</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <div class="technical-specs">
+                <h4>Power System Design Specifications</h4>
+                <table>
+                    <tr><th>Component</th><th>Power (W)</th><th>Voltage (V)</th><th>Current (A)</th><th>Thermal Load (W)</th><th>Cooling Requirement</th></tr>
+                    <tr><td>Raspberry Pi 4B</td><td>15</td><td>5.1</td><td>3.0</td><td>12</td><td>Active cooling, 15 CFM</td></tr>
+                    <tr><td>Arduino Nano</td><td>2</td><td>5.0</td><td>0.4</td><td>1</td><td>Passive cooling</td></tr>
+                    <tr><td>Motor Drivers (4x)</td><td>20</td><td>12</td><td>1.7</td><td>15</td><td>Heat sink, 10 CFM</td></tr>
+                    <tr><td>LiDAR</td><td>8</td><td>5.0</td><td>1.6</td><td>6</td><td>Passive cooling</td></tr>
+                    <tr><td>Total System</td><td>45</td><td>Various</td><td>6.7</td><td>34</td><td>25 CFM total</td></tr>
+                </table>
+            </div>
+            
+            <div class="sub-step">
+                <h3>Advanced Thermal Modeling and Cooling System Design</h3>
+                <p>Implementing computational fluid dynamics (CFD) principles for optimal cooling system design and thermal management.</p>
+                <ol>
+                    <li><strong>Thermal Load Analysis and Heat Transfer Calculations:</strong>
+                        <ul>
+                            <li>Calculate component thermal resistance: Junction-to-case, case-to-heat sink, heat sink-to-ambient thermal resistance paths.</li>
+                            <li>Perform steady-state thermal analysis: Maximum ambient temperature +40°C, target component temperatures <75°C for reliable operation.</li>
+                            <li>Model transient thermal behavior: Startup thermal ramps, thermal time constants, and peak temperature excursions during high-load operation.</li>
+                            <li>Analyze thermal coupling: Heat transfer between adjacent components, thermal shadowing effects, and system-level thermal interactions.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Cooling System Design and Optimization:</strong>
+                        <ul>
+                            <li>Design fan placement strategy: Intake fans at cool air zones, exhaust fans at hot air exit points, maintain positive internal pressure.</li>
+                            <li>Calculate required airflow: Q = (Heat Load × 3.16) / (ΔT × ρ × Cp) where Q in CFM, Heat in Watts, ΔT in °C.</li>
+                            <li>Design airflow channels: Streamlined ducts with minimum 90° bends, smooth transitions, and laminar flow characteristics.</li>
+                            <li>Optimize heat sink design: Fin spacing, height, and thickness for maximum convective heat transfer with available airflow.</li>
+                            <li>Implement thermal interface materials: High-performance TIMs (thermal conductivity >3 W/mK) for critical component interfaces.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Environmental Thermal Management:</strong>
+                        <ul>
+                            <li>Design for temperature extremes: Operation from -10°C to +50°C ambient, storage from -20°C to +70°C.</li>
+                            <li>Implement cold weather features: Heater elements for battery warming, condensation prevention, and sensor de-icing.</li>
+                            <li>Add thermal insulation: Strategic placement of thermal barriers to maintain component temperatures within operating ranges.</li>
+                            <li>Create thermal mass management: Strategic placement of thermal mass for temperature stability during power cycling.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="note">
+                <strong>Thermal Engineering Insight:</strong> Electronic component reliability follows the Arrhenius equation - every 10°C reduction in operating temperature roughly doubles component lifespan. Invest in proper thermal management for long-term reliability.
+            </div>
+            
+            <div class="tip">
+                <strong>Power System Optimization:</strong> Use switching regulators instead of linear regulators for power conversion efficiency >85%. This reduces thermal load and extends battery life. Include power sequencing for proper startup/shutdown procedures.
+            </div>
+            
+            <div class="warning">
+                <strong>Battery Safety Critical:</strong> Lithium batteries can pose fire and explosion risks if damaged or overcharged. Always include thermal protection, current limiting, and physical protection. Follow UN3480 shipping regulations for lithium batteries.
+            </div>
+            
+            <div class="measurement-guide">
+                <h4>Power System Measurement Standards</h4>
+                <p>Voltage regulation: ±5% for digital circuits, ±2% for analog sensors. Thermal measurements: ±2°C accuracy for temperature monitoring. Power efficiency: >80% for all DC-DC converters. Measure using calibrated multimeters and thermal imaging cameras.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2>Step 6: Complex Assembly Integration and Validation with Systems Engineering</h2>
+            <p>The assembly phase integrates all subsystems into a cohesive autonomous rover platform, requiring sophisticated systems engineering approaches, comprehensive testing protocols, and validation procedures. This step ensures all components work together harmoniously while maintaining individual subsystem performance specifications.</p>
+            
+            <div class="design-rationale">
+                <h4>Systems Integration Philosophy for Autonomous Platforms</h4>
+                <p>Successful autonomous rover integration requires holistic systems thinking that considers mechanical, electrical, software, and operational interactions. The assembly process must validate not only individual component performance but also emergent system behaviors, fault tolerance, and operational safety under all anticipated mission conditions.</p>
+            </div>
+            
+            <ol>
+                <li><strong>Advanced Assembly Sequencing and Integration Strategy:</strong>
+                    <ul>
+                        <li>Create comprehensive assembly tree: Hierarchical breakdown showing component relationships, assembly dependencies, and critical path analysis.</li>
+                        <li>Design assembly fixtures and tooling: Custom jigs for accurate component positioning, torque verification tools, and alignment fixtures.</li>
+                        <li>Implement modular integration approach: Assemble and test major subsystems independently before final integration to isolate potential issues.</li>
+                        <li>Establish assembly checkpoints: Quality gates at each major assembly step with go/no-go criteria and documentation requirements.</li>
+                        <li>Create detailed work instructions: Step-by-step procedures with photos, torque specifications, tool requirements, and safety precautions.</li>
+                        <li>Implement traceability systems: Serial number tracking, component lot codes, and assembly documentation for quality control and warranty support.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Precision Component Alignment and Fastener Management:</strong>
+                    <ul>
+                        <li>Use assembly coordinate system: Establish primary datum features on chassis for accurate component positioning and measurement verification.</li>
+                        <li>Implement fastener standardization: Minimize fastener types (M3, M4, M5 only), use color-coded fasteners for different applications.</li>
+                        <li>Apply proper torque specifications: M3 screws = 1.2 Nm, M4 screws = 2.5 Nm, M5 screws = 4.0 Nm (aluminum threads).</li>
+                        <li>Use thread locking compounds: Blue Loctite 243 for removable fasteners, Red Loctite 271 for permanent installations.</li>
+                        <li>Implement assembly verification: Go/no-go gauges for critical dimensions, photographic documentation of each assembly step.</li>
+                        <li>Create fastener schedules: Detailed lists specifying fastener type, quantity, torque, and thread locker requirements for each assembly.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Comprehensive Interference Analysis and Clearance Verification:</strong>
+                    <ul>
+                        <li>Perform digital mockup analysis: Use Onshape's interference detection to identify potential conflicts between components in all operational positions.</li>
+                        <li>Validate cable routing clearances: Ensure minimum 5mm clearance for power cables, 10mm for data cables to prevent electromagnetic interference.</li>
+                        <li>Check thermal expansion effects: Calculate dimensional changes for temperature range (-10°C to +60°C) and verify adequate clearances.</li>
+                        <li>Analyze dynamic clearances: Consider component movement during operation (wheel steering, sensor rotation, thermal growth).</li>
+                        <li>Verify maintenance access: Ensure all serviceable components have adequate access for tools and human hands (minimum 25mm clearance).</li>
+                        <li>Validate emergency stop accessibility: Ensure emergency stop button is accessible from any approach angle within 2 seconds.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Electrical Integration and Signal Integrity Validation:</strong>
+                    <ul>
+                        <li>Implement systematic wiring approach: Color-coded wiring harnesses, standardized connector types, and comprehensive labeling system.</li>
+                        <li>Verify power system integration: Measure actual power consumption vs. theoretical calculations, validate voltage regulation at all load conditions.</li>
+                        <li>Test communication interfaces: Verify I2C, SPI, UART, and GPIO signal integrity using oscilloscope measurements.</li>
+                        <li>Validate EMI/EMC compliance: Test electromagnetic emissions and susceptibility, ensure proper grounding and shielding effectiveness.</li>
+                        <li>Perform power-on sequence validation: Verify controlled startup sequence prevents inrush current damage and ensures proper system initialization.</li>
+                        <li>Test fault detection systems: Validate overcurrent protection, thermal shutdowns, and emergency stop functionality under controlled conditions.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Sensor Calibration and Coordinate System Validation:</strong>
+                    <ul>
+                        <li>Establish rover coordinate system: Physically mark datum points on chassis for reference, document in technical drawings.</li>
+                        <li>Measure sensor positions precisely: Use coordinate measuring machine (CMM) or laser tracker for sub-millimeter accuracy measurements.</li>
+                        <li>Calibrate sensor orientations: Use precision angle measurement tools to verify sensor pointing directions and field-of-view alignments.</li>
+                        <li>Validate transformation matrices: Test coordinate transformations between sensor frames using known target positions.</li>
+                        <li>Perform sensor fusion validation: Test multi-sensor data fusion algorithms with controlled target scenarios.</li>
+                        <li>Document calibration procedures: Create repeatable calibration protocols for field maintenance and sensor replacement.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Systems Performance Integration Testing:</strong>
+                    <ul>
+                        <li>Conduct subsystem interaction testing: Verify that simultaneous operation of all subsystems doesn't cause performance degradation.</li>
+                        <li>Validate thermal performance: Measure component temperatures under full operational load, verify cooling system effectiveness.</li>
+                        <li>Test mechanical performance: Verify structural integrity under operational loads, check for loosening fasteners after vibration exposure.</li>
+                        <li>Perform communication stress testing: Validate data throughput and latency under maximum sensor data generation rates.</li>
+                        <li>Validate power system performance: Test battery life under various operational scenarios, verify charging system functionality.</li>
+                        <li>Conduct environmental testing: Validate performance under temperature extremes, humidity, vibration, and dust exposure.</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <div class="technical-specs">
+                <h4>Assembly Integration Verification Requirements</h4>
+                <table>
+                    <tr><th>System</th><th>Verification Method</th><th>Acceptance Criteria</th><th>Test Duration</th><th>Documentation</th></tr>
+                    <tr><td>Mechanical</td><td>Torque verification, clearance check</td><td>All fasteners to spec, no interference</td><td>2 hours</td><td>Assembly checklist</td></tr>
+                    <tr><td>Electrical</td><td>Continuity, power-on test</td><td>All voltages ±5%, no short circuits</td><td>1 hour</td><td>Test protocol</td></tr>
+                    <tr><td>Thermal</td><td>Temperature measurement</td><td>All components <75°C @ full load</td><td>4 hours</td><td>Thermal map</td></tr>
+                    <tr><td>Software</td><td>Integration testing</td><td>All sensors functional, data rates met</td><td>8 hours</td><td>Test report</td></tr>
+                </table>
+            </div>
+            
+            <div class="sub-step">
+                <h3>Advanced Quality Assurance and Validation Protocols</h3>
+                <p>Implementing comprehensive quality systems to ensure consistent rover performance and reliability across all operational conditions.</p>
+                <ol>
+                    <li><strong>Statistical Process Control and Quality Metrics:</strong>
+                        <ul>
+                            <li>Establish control charts: Track key assembly parameters (torque values, clearances, electrical measurements) to identify process drift.</li>
+                            <li>Implement sampling plans: Statistical sampling for non-destructive testing, 100% inspection for critical safety features.</li>
+                            <li>Create quality dashboards: Real-time monitoring of assembly quality metrics, trend analysis, and predictive quality indicators.</li>
+                            <li>Develop quality procedures: Standard operating procedures (SOPs) for all assembly and testing operations.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Failure Mode and Effects Analysis (FMEA):</strong>
+                        <ul>
+                            <li>Identify potential failure modes: Systematic analysis of how each component or assembly could fail during operation.</li>
+                            <li>Assess failure impacts: Evaluate consequences of each failure mode on rover performance, safety, and mission success.</li>
+                            <li>Implement prevention strategies: Design changes, redundancy, or monitoring systems to prevent or mitigate identified failure modes.</li>
+                            <li>Create contingency procedures: Emergency procedures for handling failures during operation or competition.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Reliability Testing and Validation:</strong>
+                        <ul>
+                            <li>Perform accelerated life testing: High-stress testing to predict long-term reliability and identify early failure modes.</li>
+                            <li>Conduct environmental stress screening: Temperature cycling, vibration testing, and humidity exposure to precipitate latent defects.</li>
+                            <li>Validate mean time between failures (MTBF): Statistical analysis of failure data to predict maintenance intervals.</li>
+                            <li>Test fault tolerance: Verify rover continues safe operation when individual components fail.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="note">
+                <strong>Systems Engineering Principle:</strong> The rover is greater than the sum of its parts. Emergent behaviors arise from component interactions that aren't apparent when testing individual subsystems. Always test integrated system performance under realistic operational conditions.
+            </div>
+            
+            <div class="tip">
+                <strong>Assembly Efficiency:</strong> Create assembly kits with all required fasteners, tools, and components organized together. Use shadow boards and tool organization to minimize assembly time and reduce errors. Document lessons learned for continuous improvement.
+            </div>
+            
+            <div class="warning">
+                <strong>Safety Integration Warning:</strong> Emergency stop systems must be independent of software control and function even during system failures. Test emergency stop functionality regularly and ensure all operators understand emergency procedures.
+            </div>
+            
+            <div class="measurement-guide">
+                <h4>Integration Measurement Standards</h4>
+                <p>Assembly tolerance stack-up: ±0.5mm total positional error. Electrical performance: <1% voltage regulation error. Thermal performance: <5°C deviation from predicted temperatures. Use calibrated instruments and maintain measurement uncertainty documentation.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2>Step 7: Manufacturing Preparation and Quality Control with Production Engineering</h2>
+            <p>Transitioning from design to manufacturing requires comprehensive preparation including material selection optimization, manufacturing process planning, quality control system implementation, and documentation creation. This step ensures reproducible, cost-effective production while maintaining design intent and performance specifications.</p>
+            
+            <div class="design-rationale">
+                <h4>Design for Manufacturing (DFM) and Production Excellence</h4>
+                <p>Effective manufacturing preparation bridges the gap between design intent and production reality. This involves optimizing designs for chosen manufacturing processes, establishing quality control systems, creating comprehensive documentation, and implementing continuous improvement methodologies to achieve consistent, high-quality rover production.</p>
+            </div>
+            
+            <ol>
+                <li><strong>Comprehensive Manufacturing Process Selection and Optimization:</strong>
+                    <ul>
+                        <li>Analyze production volume requirements: Prototype quantities (1-10 units), pilot production (10-100 units), or full production (100+ units).</li>
+                        <li>Evaluate manufacturing options for each component:
+                            <ul>
+                                <li>3D Printing: Rapid prototyping, complex geometries, low-volume production (FDM, SLA, SLS processes)</li>
+                                <li>CNC Machining: High precision, excellent surface finish, moderate volumes (3-axis, 4-axis, 5-axis capabilities)</li>
+                                <li>Injection Molding: High volume production, excellent repeatability, requires tooling investment</li>
+                                <li>Sheet Metal Fabrication: Large flat components, cost-effective for chassis components</li>
+                            </ul>
+                        </li>
+                        <li>Perform manufacturing cost analysis: Material costs, processing costs, tooling amortization, labor costs, and overhead allocation.</li>
+                        <li>Optimize designs for chosen processes: Add draft angles for molding, design for machining accessibility, minimize support material for 3D printing.</li>
+                        <li>Create process flow diagrams: Document manufacturing sequence, quality checkpoints, and material flow for each component.</li>
+                        <li>Implement lean manufacturing principles: Minimize waste, reduce setup times, optimize workflow, and eliminate non-value-added activities.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Advanced Material Selection and Supply Chain Management:</strong>
+                    <ul>
+                        <li>Perform detailed material property analysis:
+                            <ul>
+                                <li>Mechanical properties: Strength, stiffness, impact resistance, fatigue life</li>
+                                <li>Environmental resistance: UV stability, chemical resistance, temperature range</li>
+                                <li>Manufacturing compatibility: Machinability, printability, moldability</li>
+                                <li>Cost considerations: Material cost, availability, supplier reliability</li>
+                            </ul>
+                        </li>
+                        <li>Establish material specifications: Create detailed material standards including grade, condition, certification requirements, and inspection criteria.</li>
+                        <li>Develop supplier qualification programs: Evaluate supplier capabilities, quality systems, delivery performance, and cost competitiveness.</li>
+                        <li>Implement material traceability: Track material lots from supplier through finished product for quality control and recall capability.</li>
+                        <li>Create material alternates list: Identify backup suppliers and alternate materials to ensure supply continuity.</li>
+                        <li>Establish inventory management: Optimize inventory levels, implement just-in-time delivery where appropriate, minimize carrying costs.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Precision File Export and Manufacturing Data Preparation:</strong>
+                    <ul>
+                        <li>Configure export settings for each manufacturing process:
+                            <ul>
+                                <li>STL files: Resolution 0.1mm for 3D printing, verify mesh integrity, check for non-manifold surfaces</li>
+                                <li>STEP files: Maintain parametric relationships for CNC programming, include material properties and finish specifications</li>
+                                <li>2D drawings: PDF and DWG formats with complete dimensioning, tolerances, and manufacturing notes</li>
+                            </ul>
+                        </li>
+                        <li>Create comprehensive manufacturing documentation packages:
+                            <ul>
+                                <li>Technical drawings with GD&T specifications, material callouts, and finish requirements</li>
+                                <li>Manufacturing instructions including setup procedures, tooling requirements, and quality checkpoints</li>
+                                <li>Inspection plans with measurement requirements, acceptance criteria, and documentation procedures</li>
+                            </ul>
+                        </li>
+                        <li>Implement version control for manufacturing data: Ensure all manufacturing documents are synchronized with design changes.</li>
+                        <li>Validate file integrity: Check all exported files for accuracy, completeness, and manufacturing compatibility.</li>
+                        <li>Create manufacturing bills of materials (MBOM): Include all components, fasteners, consumables, and packaging materials.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Quality Control System Implementation:</strong>
+                    <ul>
+                        <li>Develop inspection and test procedures for each component:
+                            <ul>
+                                <li>Incoming inspection: Verify supplier-provided materials and components meet specifications</li>
+                                <li>In-process inspection: Monitor manufacturing processes to prevent defects</li>
+                                <li>Final inspection: Complete dimensional and functional verification before assembly</li>
+                            </ul>
+                        </li>
+                        <li>Create inspection fixtures and tools: Design go/no-go gauges, coordinate measuring machine (CMM) programs, and functional test fixtures.</li>
+                        <li>Establish statistical process control: Monitor key process parameters and product characteristics to maintain consistent quality.</li>
+                        <li>Implement corrective action procedures: Systematic approach for investigating and resolving quality issues.</li>
+                        <li>Create quality documentation systems: Maintain complete records of all inspections, tests, and corrective actions.</li>
+                        <li>Establish calibration programs: Ensure all measurement equipment is properly calibrated and traceable to national standards.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Production Planning and Workflow Optimization:</strong>
+                    <ul>
+                        <li>Create detailed production schedules: Coordinate material delivery, manufacturing operations, and assembly activities.</li>
+                        <li>Implement capacity planning: Balance workload across available resources, identify bottlenecks, and optimize throughput.</li>
+                        <li>Design workspace layout: Optimize material flow, minimize handling, and ensure ergonomic working conditions.</li>
+                        <li>Establish work instructions: Create detailed procedures for each manufacturing and assembly operation.</li>
+                        <li>Implement progress tracking systems: Monitor production status, identify delays, and implement corrective actions.</li>
+                        <li>Create contingency plans: Develop procedures for handling equipment failures, material shortages, and quality issues.</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Continuous Improvement and Manufacturing Excellence:</strong>
+                    <ul>
+                        <li>Implement feedback loops: Collect and analyze production data to identify improvement opportunities.</li>
+                        <li>Establish kaizen events: Regular improvement sessions focused on specific processes or quality issues.</li>
+                        <li>Create operator training programs: Ensure all personnel are properly trained on procedures, safety, and quality requirements.</li>
+                        <li>Implement preventive maintenance: Maintain equipment in optimal condition to prevent quality issues and production delays.</li>
+                        <li>Establish benchmarking programs: Compare performance against industry standards and best practices.</li>
+                        <li>Create innovation processes: Encourage and implement employee suggestions for process improvements.</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <div class="technical-specs">
+                <h4>Manufacturing Process Comparison and Selection Matrix</h4>
+                <table>
+                    <tr><th>Process</th><th>Setup Cost</th><th>Unit Cost</th><th>Lead Time</th><th>Precision</th><th>Best Application</th></tr>
+                    <tr><td>FDM 3D Printing</td><td>$0</td><td>$5-15</td><td>4-12 hours</td><td>±0.2mm</td><td>Prototypes, complex geometry</td></tr>
+                    <tr><td>SLA 3D Printing</td><td>$0</td><td>$10-30</td><td>2-8 hours</td><td>±0.1mm</td><td>High detail, smooth finish</td></tr>
+                    <tr><td>CNC Machining</td><td>$100-500</td><td>$20-100</td><td>1-5 days</td><td>±0.025mm</td><td>High precision, metal parts</td></tr>
+                    <tr><td>Injection Molding</td><td>$5,000-50,000</td><td>$2-10</td><td>4-8 weeks</td><td>±0.05mm</td><td>High volume production</td></tr>
+                </table>
+            </div>
+            
+            <div class="sub-step">
+                <h3>Advanced Quality Management and Continuous Improvement</h3>
+                <p>Implementing world-class quality management systems to ensure consistent rover performance and customer satisfaction.</p>
+                <ol>
+                    <li><strong>Statistical Quality Control Implementation:</strong>
+                        <ul>
+                            <li>Establish control charts for critical dimensions: Track key measurements over time to identify process drift before defects occur.</li>
+                            <li>Implement capability studies: Measure process capability (Cp, Cpk) to ensure manufacturing processes can consistently meet specifications.</li>
+                            <li>Create sampling plans: Develop statistically valid sampling procedures that balance inspection costs with quality assurance.</li>
+                            <li>Establish quality metrics: Track defect rates, first-pass yield, customer complaints, and cost of quality.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Six Sigma and Lean Manufacturing Integration:</strong>
+                        <ul>
+                            <li>Implement DMAIC methodology: Define, Measure, Analyze, Improve, Control approach for systematic problem solving.</li>
+                            <li>Create value stream maps: Document current state, identify waste, and design future state with improved flow.</li>
+                            <li>Establish 5S workplace organization: Sort, Set in order, Shine, Standardize, Sustain for efficient operations.</li>
+                            <li>Implement error-proofing (poka-yoke): Design fixtures and procedures that prevent errors from occurring.</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Advanced Documentation and Knowledge Management:</strong>
+                        <ul>
+                            <li>Create digital work instructions: Interactive procedures with photos, videos, and real-time feedback.</li>
+                            <li>Implement change control procedures: Ensure all design changes are properly evaluated, approved, and communicated.</li>
+                            <li>Establish configuration management: Maintain complete records of as-built configurations for traceability.</li>
+                            <li>Create lessons learned databases: Capture and share knowledge from production experiences.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="note">
+                <strong>Manufacturing Excellence Insight:</strong> Quality cannot be inspected into a product - it must be built in through proper process design, training, and control. Invest time in process development to achieve consistent, high-quality results from the start.
+            </div>
+            
+            <div class="tip">
+                <strong>Cost Optimization Strategy:</strong> Optimize the total cost of ownership, not just initial manufacturing cost. Consider assembly time, maintenance requirements, and lifecycle costs when making manufacturing decisions. Sometimes a higher initial cost yields lower total costs.
+            </div>
+            
+            <div class="warning">
+                <strong>Production Safety Warning:</strong> Manufacturing processes involve significant safety hazards including hot surfaces, moving machinery, and chemical exposure. Implement comprehensive safety training, personal protective equipment, and emergency procedures. Safety is always the top priority.
+            </div>
+            
+            <div class="measurement-guide">
+                <h4>Manufacturing Quality Standards</h4>
+                <p>Process capability: Cpk ≥ 1.33 for critical dimensions. First-pass yield: >95% for all manufacturing operations. Measurement accuracy: ±10% of tolerance zone. Calibration interval: Annual for precision instruments, quarterly for production gauges.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2>Step 8: Physical Assembly, Testing, and Optimization with Performance Validation</h2>
+            <p>The final step transforms manufactured components into a fully operational autonomous rover through systematic assembly, comprehensive testing, and iterative optimization. This phase validates all design assumptions, identifies improvement opportunities, and ensures the rover meets all performance specifications and safety requirements.</p>
+            
+            <div class="design-rationale">
+                <h4>Systems Integration and Validation Philosophy</h4>
+                <p>Physical assembly represents the culmination of the design process where theoretical concepts meet practical reality. This phase requires systematic validation of all subsystems, careful attention to assembly sequence, comprehensive testing protocols, and continuous optimization based on real-world performance data. The goal is to achieve a rover that not only meets specifications but exceeds performance expectations.</p>
+            </div>
+            
+            <ol>
+                <li><strong>Systematic Assembly Implementation with Quality Verification:</strong>
+                    <ul>
+                        <li>Execute pre-assembly preparation:
+                            <ul>
+                                <li>Organize all components using assembly kits with photos and part numbers</li>
+                                <li>Verify component quality through incoming inspection checklist</li>
+                                <li>Prepare assembly workspace with proper lighting, tools, and ESD protection</li>
+                                <li>Review assembly procedures and safety requirements with all team members</li>
+                            </ul>
+                        </li>
+                        <li>Follow systematic assembly sequence:
+                            <ul>
+                                <li>Phase 1: Chassis preparation and motor mount installation with precision alignment</li>
+                                <li>Phase 2: Power system integration including battery management and distribution</li>
+                                <li>Phase 3: Computing platform installation with thermal management system</li>
+                                <li>Phase 4: Sensor integration with calibration and verification procedures</li>
+                                <li>Phase 5: Final systems integration and comprehensive testing</li>
+                            </ul>
+                        </li>
+                        <li>Implement assembly quality checkpoints:
+                            <ul>
+                                <li>Dimensional verification using calibrated measuring tools</li>
+                                <li>Fastener torque verification with calibrated torque wrenches</li>
+                                <li>Electrical continuity and insulation resistance testing</li>
+                                <li>Photo documentation of each major assembly milestone</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li><strong>Advanced Motor and Drivetrain Integration:</strong>
+                    <ul>
+                        <li>Precise motor mounting and alignment:
+                            <ul>
+                                <li>Use dial indicators to verify motor shaft alignment within ±0.1mm runout</li>
+                                <li>Apply specified torque values: M3 screws to 1.2 Nm with thread locker</li>
+                                <li>Verify wheel attachment with proper clearances and smooth rotation</li>
+                                <li>Test motor electrical connections with multimeter verification</li>
+                            </ul>
+                        </li>
+                        <li>Drivetrain performance validation:
+                            <ul>
+                                <li>Measure no-load current draw for each motor (should be <100mA)</li>
+                                <li>Test stall current and verify overcurrent protection activation</li>
+                                <li>Verify wheel alignment using string line method (toe-in ±0.5°)</li>
+                                <li>Test differential steering accuracy and repeatability</li>
+                            </ul>
+                        </li>
+                        <li>Vibration and noise assessment:
+                            <ul>
+                                <li>Measure vibration levels using accelerometer at various motor speeds</li>
+                                <li>Identify and eliminate sources of excessive noise or vibration</li>
+                                <li>Verify motor mount effectiveness in isolating chassis from drivetrain vibrations</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li><strong>Comprehensive Sensor Integration and Calibration:</strong>
+                    <ul>
+                        <li>LiDAR system integration and optimization:
+                            <ul>
+                                <li>Mount LiDAR with precision alignment to rover coordinate system</li>
+                                <li>Verify 360° rotation without cable binding or mechanical interference</li>
+                                <li>Calibrate distance measurements using known targets at various ranges</li>
+                                <li>Test scan rate and data quality under various lighting conditions</li>
+                                <li>Validate environmental protection and thermal performance</li>
+                            </ul>
+                        </li>
+                        <li>Camera system setup and optimization:
+                            <ul>
+                                <li>Install camera with precise aiming and focus adjustment</li>
+                                <li>Calibrate camera intrinsic parameters using checkerboard targets</li>
+                                <li>Test auto-exposure and white balance under various lighting conditions</li>
+                                <li>Verify image quality, resolution, and frame rate performance</li>
+                                <li>Validate cable routing and strain relief effectiveness</li>
+                            </ul>
+                        </li>
+                        <li>Ultrasonic sensor array configuration:
+                            <ul>
+                                <li>Position sensors for optimal coverage with minimal blind spots</li>
+                                <li>Calibrate distance measurements and verify accuracy across operating range</li>
+                                <li>Test cross-talk immunity between adjacent sensors</li>
+                                <li>Validate environmental sealing and moisture protection</li>
+                                <li>Optimize sensor timing to prevent interference</li>
+                            </ul>
+                        </li>
+                        <li>IMU and GPS integration:
+                            <ul>
+                                <li>Install IMU at rover center of rotation with precise leveling</li>
+                                <li>Calibrate magnetometer away from ferrous materials and electrical interference</li>
+                                <li>Verify GPS antenna positioning for optimal satellite reception</li>
+                                <li>Test sensor fusion algorithms with known motion profiles</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li><strong>Power System Validation and Optimization:</strong>
+                    <ul>
+                        <li>Battery system integration and testing:
+                            <ul>
+                                <li>Install battery management system with proper cell balancing</li>
+                                <li>Verify charging system functionality and safety protection</li>
+                                <li>Test battery capacity and discharge characteristics under load</li>
+                                <li>Validate thermal management and cooling effectiveness</li>
+                                <li>Verify emergency shutdown and safety systems</li>
+                            </ul>
+                        </li>
+                                                    <li>Measure voltage regulation accuracy at all power rails (±2% tolerance)</li>
+                                <li>Test overcurrent protection activation and reset functionality</li>
+                                <li>Verify power sequencing during startup and shutdown procedures</li>
+                                <li>Measure power efficiency and identify optimization opportunities</li>
+                                <li>Test power system performance under various load conditions</li>
+                            </ul>
+                        </li>
+                        <li>Thermal management system validation:
+                            <ul>
+                                <li>Measure component temperatures under full operational load</li>
+                                <li>Verify cooling fan performance and automatic speed control</li>
+                                <li>Test thermal protection systems and shutdown procedures</li>
+                                <li>Validate airflow patterns using smoke testing or flow visualization</li>
+                                <li>Optimize thermal interface materials and heat sink performance</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li><strong>Comprehensive Systems Testing and Performance Validation:</strong>
+                    <ul>
+                        <li>Functional systems testing:
+                            <ul>
+                                <li>Execute complete power-on sequence and verify all systems initialization</li>
+                                <li>Test communication interfaces between all components</li>
+                                <li>Verify sensor data acquisition and processing performance</li>
+                                <li>Test autonomous navigation algorithms with controlled scenarios</li>
+                                <li>Validate emergency stop functionality from all operational modes</li>
+                            </ul>
+                        </li>
+                        <li>Performance characterization testing:
+                            <ul>
+                                <li>Measure maximum speed, acceleration, and turning radius capabilities</li>
+                                <li>Test battery life under various operational profiles</li>
+                                <li>Verify sensor accuracy and repeatability using known targets</li>
+                                <li>Test communication range and data throughput performance</li>
+                                <li>Measure overall system reliability and fault tolerance</li>
+                            </ul>
+                        </li>
+                        <li>Environmental testing and validation:
+                            <ul>
+                                <li>Test performance under various temperature conditions (-10°C to +50°C)</li>
+                                <li>Verify operation under different lighting conditions (bright sun, indoor, night)</li>
+                                <li>Test dust and moisture resistance under controlled conditions</li>
+                                <li>Validate vibration resistance and mechanical durability</li>
+                                <li>Test electromagnetic compatibility with other electronic devices</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li><strong>Advanced Optimization and Performance Tuning:</strong>
+                    <ul>
+                        <li>Software optimization and tuning:
+                            <ul>
+                                <li>Optimize sensor fusion algorithms for improved accuracy and responsiveness</li>
+                                <li>Tune motion control parameters for smooth and efficient movement</li>
+                                <li>Optimize path planning algorithms for different operational scenarios</li>
+                                <li>Implement adaptive algorithms that learn from operational experience</li>
+                                <li>Optimize power management for maximum battery life</li>
+                            </ul>
+                        </li>
+                        <li>Hardware optimization based on testing results:
+                            <ul>
+                                <li>Adjust sensor mounting positions based on performance data</li>
+                                <li>Optimize cooling system based on thermal measurements</li>
+                                <li>Fine-tune mechanical systems for improved performance</li>
+                                <li>Upgrade components that limit overall system performance</li>
+                                <li>Implement design modifications to address identified issues</li>
+                            </ul>
+                        </li>
+                        <li>System integration improvements:
+                            <ul>
+                                <li>Optimize component placement for better weight distribution</li>
+                                <li>Improve cable management for better reliability and serviceability</li>
+                                <li>Enhance user interface and diagnostic capabilities</li>
+                                <li>Implement predictive maintenance features</li>
+                                <li>Add redundancy for critical system components</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <div class="technical-specs">
+                <h4>Performance Validation Specifications and Acceptance Criteria</h4>
+                <table>
+                    <tr><th>Performance Parameter</th><th>Target Specification</th><th>Test Method</th><th>Acceptance Criteria</th><th>Test Duration</th></tr>
+                    <tr><td>Maximum Speed</td><td>2.0 m/s</td><td>GPS speed measurement</td><td>≥1.8 m/s sustained</td><td>10 minutes</td></tr>
+                    <tr><td>Navigation Accuracy</td><td>±10cm position error</td><td>Known waypoint navigation</td><td>≤15cm RMS error</td><td>30 minutes</td></tr>
+                    <tr><td>Battery Life</td><td>4 hours operation</td><td>Continuous operation test</td><td>≥3.5 hours @ full load</td><td>4 hours</td></tr>
+                    <tr><td>Sensor Range</td><td>LiDAR: 8m, Camera: 10m</td><td>Target detection test</td><td>≥90% detection rate</td><td>1 hour</td></tr>
+                    <tr><td>Emergency Stop</td><td><2 seconds response</td><td>Reaction time measurement</td><td>≤1.5 seconds maximum</td><td>10 tests</td></tr>
+                </table>
+            </div>
+            
+            <div class="sub-step">
+                <h3>Advanced Testing Protocols and Validation Procedures</h3>
+                <p>Implementing comprehensive testing methodologies to ensure rover reliability, safety, and performance under all operational conditions.</p>
+                <ol>
+                    <li><strong>Systematic Test Planning and Execution:</strong>
+                        <ul>
+                            <li>Develop test matrices covering all operational scenarios and environmental conditions</li>
+                            <li>Create detailed test procedures with pass/fail criteria and data collection requirements</li>
+                            <li>Implement statistical test planning to ensure adequate sample sizes and confidence levels</li>
+                            <li>Establish test data management systems for tracking results and identifying trends</li>
+                            <li>Create automated test execution where possible to improve repeatability and efficiency</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Failure Analysis and Continuous Improvement:</strong>
+                        <ul>
+                            <li>Implement systematic failure analysis procedures using root cause analysis techniques</li>
+                            <li>Create failure reporting and corrective action systems (FRACAS) for tracking issues</li>
+                            <li>Perform design reviews based on testing results and operational experience</li>
+                            <li>Implement design changes through formal change control procedures</li>
+                            <li>Validate improvements through regression testing and performance comparison</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Long-term Reliability and Maintenance Planning:</strong>
+                        <ul>
+                            <li>Establish preventive maintenance schedules based on component wear rates and failure modes</li>
+                            <li>Create diagnostic and troubleshooting procedures for field maintenance</li>
+                            <li>Implement condition monitoring systems to predict maintenance requirements</li>
+                            <li>Develop spare parts strategies and inventory management procedures</li>
+                            <li>Create operator training programs for proper rover operation and basic maintenance</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="note">
+                <strong>Testing Philosophy:</strong> Test early, test often, and test realistically. Laboratory testing provides controlled conditions for baseline performance, but field testing under actual operational conditions reveals issues that laboratory testing cannot predict. Always validate performance under worst-case scenarios.
+            </div>
+            
+            <div class="tip">
+                <strong>Optimization Strategy:</strong> Optimization is an iterative process. Start with the largest performance limiters and work systematically through smaller improvements. Document all changes and their effects to build institutional knowledge for future projects.
+            </div>
+            
+            <div class="warning">
+                <strong>Safety Validation Critical:</strong> Never compromise safety for performance. Emergency stop systems, overcurrent protection, and thermal protection must function reliably under all conditions. Test safety systems regularly and maintain them according to manufacturer recommendations.
+            </div>
+            
+            <div class="measurement-guide">
+                <h4>Testing Measurement Standards and Calibration</h4>
+                <p>Position accuracy: ±5mm using RTK GPS or total station. Speed accuracy: ±0.1 m/s using calibrated GPS or radar. Temperature accuracy: ±1°C using calibrated thermocouples. Electrical measurements: ±1% accuracy using calibrated multimeters. Maintain calibration certificates for all test equipment.</p>
+            </div>
+            
+            <div class="design-rationale">
+                <h4>Project Completion and Future Development Roadmap</h4>
+                <p>Successful completion of this comprehensive rover development project provides a solid foundation for autonomous vehicle development. The systematic approach, detailed documentation, and rigorous testing procedures create a platform for future enhancements and advanced autonomous vehicle research. Consider this project as the first step in a journey toward more sophisticated autonomous systems.</p>
+            </div>
+            
+            <div class="note">
+                <strong>Project Success Metrics:</strong> Evaluate project success not only on technical performance but also on documentation quality, team learning, and knowledge transfer. A successful project creates capabilities that extend far beyond the immediate rover application.
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 50px; padding: 30px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 15px;">
+            <h2>Congratulations on Completing Your Autonomous Rover!</h2>
+            <p style="font-size: 1.2em; margin: 20px 0;">You have successfully designed, built, and tested a sophisticated autonomous rover platform. This achievement represents mastery of mechanical design, systems integration, manufacturing processes, and quality engineering principles.</p>
+            <p style="font-size: 1.1em;">Continue your journey in autonomous systems by exploring advanced algorithms, additional sensors, and more complex operational scenarios. The foundation you've built here will support increasingly sophisticated autonomous vehicle applications.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Simple progress bar animation
+        window.addEventListener('scroll', function() {
+            const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            document.querySelector('.progress-fill').style.width = scrollPercent + '%';
+        });
+        
+        // Add smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
